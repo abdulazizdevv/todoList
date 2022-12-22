@@ -100,5 +100,3 @@ elList.addEventListener("click", function (evt) {
     elUnCompletedTodosCount.textContent = `(${unCompletedTodo.length})`;
   }
 });
-completedTodo = todos.filter((el) => el.isCompleted);
-elAllTodosCount.textContent = `(${todos.length})`;
