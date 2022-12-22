@@ -1,16 +1,20 @@
 const elForm = document.querySelector(".js-form");
 const elInput = document.querySelector(".js-input");
 const elList = document.querySelector(".js-list");
+const elButtons = document.querySelector(".js-buttons");
+
 const elAll = document.querySelector(".js-all");
 const elCompleted = document.querySelector(".js-completed");
 const elUnCompleted = document.querySelector(".js-unCompleted");
-const elButtons = document.querySelector(".js-buttons");
 
-let elAllTodosCount = elAll.children[0];
-let elCompletedTodosCount = elCompleted.children[0];
-let elUnCompletedTodosCount = elUnCompleted.children[0];
+const elAllbtn = document.querySelector(".js-all-btn");
+const elCompletedbtn = document.querySelector(".js-completed-btn");
+const elUnCompletedbtn = document.querySelector(".js-unCompleted-btn");
 
 let todos = [];
+
+let mainCheckeds = 0;
+
 let completedTodo;
 let unCompletedTodo = todos;
 
@@ -40,7 +44,7 @@ const renderTodo = (array, node) => {
 
     node.appendChild(newTodo);
 
-    spanText.innerHTML = el.id + " " + el.text;
+    spanText.textContent = el.text;
 
     newTodo.appendChild(newInput);
     newTodo.appendChild(spanText);
@@ -51,6 +55,10 @@ const renderTodo = (array, node) => {
       newInput.checked = true;
       spanText.style.textDecoration = "line-through";
     }
+
+    elAll.textContent = todos.length;
+    elUnCompleted.textContent = todos.length;
+    elInput.value = "";
   });
 };
 
@@ -92,11 +100,34 @@ elList.addEventListener("click", function (evt) {
 
     renderTodo(todos, elList);
 
-    completedTodo = todos.filter((el) => el.isCompleted);
-    unCompletedTodo = todos.filter((el) => !el.isCompleted);
+    if (findedItem.isCompleted == true) {
+      mainCheckeds += 1;
+    }
+    if (findedItem.isCompleted == false) {
+      mainCheckeds -= 1;
+    }
+    elCompleted.textContent = mainCheckeds;
+    elUnCompleted.textContent = todos.length - mainCheckeds;
+  }
+});
 
-    elAllTodosCount.textContent = `(${todos.length})`;
-    elCompletedTodosCount.textContent = `(${completedTodo.length})`;
-    elUnCompletedTodosCount.textContent = `(${unCompletedTodo.length})`;
+elButtons.addEventListener("click", (evt) => {
+  if (evt.target.matches(".js-all-btn")) {
+    renderTodo(todos, elList);
+  }
+  if (evt.target.matches(".js-completed-btn")) {
+    if (elCompleted.textContent != 0) {
+      const Filtered = todos.filter((el) => el.isCompleted == true);
+      console.log(todos);
+      elCompleted.textContent = Filtered.length;
+      renderTodo(Filtered, elList);
+    }
+  }
+  if (evt.target.matches(".js-unCompleted-btn")) {
+    if (elUnCompleted.textContent != 0) {
+      const Filtered = todos.filter((el) => el.isCompleted == false);
+      elUnCompleted.textContent = Filtered.length;
+      renderTodo(Filtered, elList);
+    }
   }
 });
